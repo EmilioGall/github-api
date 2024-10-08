@@ -15,7 +15,39 @@ submitBtn.addEventListener("click", function (event) {
    // Define const for Search Input
    const searchInput = document.getElementById("search-input");
 
-   //Call function for repositories research
-   searchRepositories(searchInput.value);
+   // Define const for Search Type Input
+   const typeInput = document.getElementById("search-type-input");
+
+   switch (typeInput.value) {
+
+      case '1':
+
+         //Call function for repositories research
+         searchRepositories(searchInput.value);
+
+         break;
+
+      case '2':
+
+         //Call function for repositories research
+         searchUsers(searchInput.value);
+
+         break;
+
+      case '3':
+
+         //Call function for repositories research
+         searchOrganizations(searchInput.value);
+
+         break;
+
+      default:
+
+         //Call function for repositories research
+         searchRepositories(searchInput.value);
+
+         break;
+
+   }
 
 });
