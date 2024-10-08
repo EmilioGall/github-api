@@ -84,60 +84,153 @@ function printUserCard(userToPrint) {
 
 
 /**
+ * Description: function prints correct select options on input group DOM element.
+ * 
+ */
+function printSelectOnInputgroup() {
+
+   if (typeInputElem.value == '1') {
+
+      inputgroupDivElem.innerHTML = `
+         <select id="sort-input" class="form-select" aria-label="Select sort by">
+   
+            <option selected value="1">Stars</option>
+            <option value="2">Forks</option>
+            <option value="3">Issues</option>
+            <option value="4">Updated</option>
+   
+         </select>
+   
+         <select id="order-input" class="form-select" aria-label="Select order">
+   
+            <option selected value="1">Desc</option>
+            <option value="2">Asc</option>
+   
+         </select>`
+
+   } else if (typeInputElem.value == '2' || typeInputElem.value == '3') {
+
+      inputgroupDivElem.innerHTML = `
+      <select id="sort-input" class="form-select" aria-label="Select sort by">
+   
+         <option selected value="1">Joined</option>
+         <option value="2">Repos</option>
+         <option value="3">Followers</option>
+   
+      </select>
+   
+      <select id="order-input" class="form-select" aria-label="Select order">
+   
+         <option selected value="1">Desc</option>
+         <option value="2">Asc</option>
+   
+      </select>`
+
+   };
+
+};
+
+
+/**
  * Description: function define constants value for [sortValue].
  * @returns {string} sortValue
  */
-function getFormSortValue() {
+function getFormSortValue(searchInputTypeValue) {
 
    // Define const for Sort Input
    const sortInput = document.getElementById("sort-input");
 
-   // Define variable for sort value
-   let sortValue = 'stars'; // default
 
-   // Determine sortValue based on selected option
-   switch (sortInput.value) {
+   if (searchInputTypeValue == '1') {
 
-      // Check for '1' for ascending sort
-      case '1':
+      let sortValue = '';
 
-         sortValue = 'stars';
+      // Determine sortValue based on selected option
+      switch (sortInput.value) {
 
-         break;
+         // Check for '1' for ascending sort
+         case '1':
 
-      // Optionally handle '2' for descending sort
-      case '2':
+            sortValue = 'stars';
 
-         sortValue = 'forks';
+            break;
 
-         break;
+         // Optionally handle '2' for descending sort
+         case '2':
 
-      // Optionally handle '2' for descending sort
-      case '3':
+            sortValue = 'forks';
 
-         sortValue = 'help-wanted-issues';
+            break;
 
-         break;
+         // Optionally handle '3' for descending sort
+         case '3':
 
-      // Optionally handle '2' for descending sort
-      case '4':
+            sortValue = 'help-wanted-issues';
 
-         sortValue = 'updated';
+            break;
 
-         break;
+         // Optionally handle '4' for descending sort
+         case '4':
 
-      // Default case
-      default:
+            sortValue = 'updated';
 
-         sortValue = 'desc';
+            break;
 
-         break;
+         // Default case
+         default:
+
+            sortValue = 'stars';
+
+            break;
+
+      };
+
+      console.log(`Sort value is: ${sortValue}`);
+
+      return sortValue;
+
+   } else if (searchInputTypeValue == '2' || searchInputTypeValue == '3') {
+
+      let sortValue = '';
+
+      // Determine sortValue based on selected option
+      switch (sortInput.value) {
+
+         // Check for '1' for ascending sort
+         case '1':
+
+            sortValue = 'joined';
+
+            break;
+
+         // Optionally handle '2' for descending sort
+         case '2':
+
+            sortValue = 'repositories';
+
+            break;
+
+         // Optionally handle '3' for descending sort
+         case '3':
+
+            sortValue = 'followers';
+
+            break;
+
+         // Default case
+         default:
+
+            sortValue = 'joined';
+
+            break;
+
+      };
+
+      console.log(`Sort value is: ${sortValue}`);
+
+      return sortValue;
 
    };
-
-   console.log(`Sort value is: ${sortValue}`);
-
-   return sortValue;
 
 };
 
@@ -189,22 +282,42 @@ function getFormOrderValue() {
 /**
  * Description: function search for results looking for similar name given Input string and type.
  * @param {string} searchInputValue
+ * @param {string} searchInputTypeValue
  */
-async function searchRepositories(searchInputValue) {
+async function search(searchInputValue, searchInputTypeValue) {
+   // 1 - Repositories
+   // 2 - Users
+   // 3 - Organizations
 
-   // Define const for Base URL of GitHub Search Repositories API endpoint
-   const apiUrl = 'https://api.github.com/search/repositories';
+
+   // Define const for Base URL of GitHub Search API endpoint based on search  type
+   let apiUrl = '';
+
+   if (searchInputTypeValue == '2' || searchInputTypeValue == '3') {
+
+      apiUrl = 'https://api.github.com/search/users';
+
+   } else if (searchInputTypeValue == '1') {
+
+      apiUrl = 'https://api.github.com/search/repositories';
+
+   };
+
+   console.log('apiUrl', apiUrl);
 
    // Prepare Params for API call
    const params = {
 
-      q: searchInputValue,
-      sort: getFormSortValue(),
+      q: `${searchInputValue}${searchInputTypeValue == '1' ? '' : (searchInputTypeValue == '2') ? ' type:user' : ' type:org' }`,
+      sort: getFormSortValue(searchInputTypeValue),
       order: getFormOrderValue(),
       per_page: 15,
       page: 1,
 
    };
+
+   console.log('params', params);
+
 
    // Prepare Header for API call
    const headers = {
@@ -262,267 +375,52 @@ async function searchRepositories(searchInputValue) {
 
          console.log('Call succeed');
 
-      }
-
-      // Parse response data
-      const data = await response.json();
-
-      // console.log('Risultati della ricerca:', data.items);
-
-      const reposArray = data.items;
-
-      console.log('Array result:', reposArray);
-
-      // Cleare output-div Element
-      outputDivElem.innerHTML = '';
-
-      if (reposArray.length < 1) {
-
-         outputDivElem.innerHTML = `
-         <div class="alert alert-info text-center w-100" role="alert">
-            No repository found.
-         </div>`
-
-      }
-
-      reposArray.forEach(repo => {
-
-         printRepoCard(repo);
-
-      });
-
-   } catch (error) {
-
-      console.error('Error:', error);
-
-   }
-
-};
-
-
-/**
- * Description: function prints object result card in main DOM element.
- * @param {string} searchInputValue
- */
-async function searchUsers(searchInputValue) {
-
-   // Define const for Base URL of GitHub Search Userss API endpoint
-   const apiUrl = 'https://api.github.com/search/users';
-
-   // Prepare Params for API call
-   const params = {
-
-      q: `${searchInputValue} type:user`,
-      sort: getFormSortValue(),
-      order: getFormOrderValue(),
-      per_page: 15,
-      page: 1,
-
-   };
-
-   // Prepare Header for API call
-   const headers = {
-
-      "Authorization": `Bearer ${config.token}`,
-      "X-GitHub-Api-Version": "2022-11-28"
-
-   };
-
-   // Create URL with query parameters
-   const queryString = new URLSearchParams(params).toString();
-
-   const url = `${apiUrl}?${queryString}`;
-
-   try {
-
-      // Fetch data from API
-      const response = await fetch(url, { headers });
-
-      // Trow Errors for response not OK
-      if (response.status !== 200) {
-
-         if (response.status === 304) {
-
-            throw new Error('Not modified');
-
-         } else if (response.status === 401) {
-
-            throw new Error('Unauthorized');
-
-         } else if (response.status === 404) {
-
-            throw new Error('Data not found');
-
-         } else if (response.status === 422) {
-
-            throw new Error('Validation failed, or the endpoint has been spammed.');
-
-         } else if (response.status === 500) {
-
-            throw new Error('Server error');
-
-         } else if (response.status === 503) {
-
-            throw new Error('Service unavailable');
-
-         } else {
-
-            throw new Error('Network response was not ok');
-
-         }
       };
 
-      if (response.status == 200) {
-
-         console.log('Call succeed');
-
-      }
-
       // Parse response data
       const data = await response.json();
 
       // console.log('Risultati della ricerca:', data.items);
 
-      const usersArray = data.items;
+      const resultsArray = data.items;
 
-      console.log('Array result:', usersArray);
+      console.log('Array result:', resultsArray);
 
       // Cleare output-div Element
       outputDivElem.innerHTML = '';
 
-      if (usersArray.length < 1) {
+      if (resultsArray.length < 1) {
 
          outputDivElem.innerHTML = `
          <div class="alert alert-info text-center w-100" role="alert">
-            No user found.
+            No results found.
          </div>`
 
-      }
-
-      usersArray.forEach(user => {
-
-         printUserCard(user);
-
-      });
-
-   } catch (error) {
-
-      console.error('Error:', error);
-
-   }
-
-};
-
-
-/**
- * Description: function prints object result card in main DOM element.
- * @param {string} searchInputValue
- */
-async function searchOrganizations(searchInputValue) {
-
-   // Define const for Base URL of GitHub Search Userss API endpoint
-   const apiUrl = 'https://api.github.com/search/users';
-
-   // Prepare Params for API call
-   const params = {
-
-      q: `${searchInputValue} type:org`,
-      sort: getFormSortValue(),
-      order: getFormOrderValue(),
-      per_page: 15,
-      page: 1,
-
-   };
-
-   // Prepare Header for API call
-   const headers = {
-
-      "Authorization": `Bearer ${config.token}`,
-      "X-GitHub-Api-Version": "2022-11-28"
-
-   };
-
-   // Create URL with query parameters
-   const queryString = new URLSearchParams(params).toString();
-
-   const url = `${apiUrl}?${queryString}`;
-
-   try {
-
-      // Fetch data from API
-      const response = await fetch(url, { headers });
-
-      // Trow Errors for response not OK
-      if (response.status !== 200) {
-
-         if (response.status === 304) {
-
-            throw new Error('Not modified');
-
-         } else if (response.status === 401) {
-
-            throw new Error('Unauthorized');
-
-         } else if (response.status === 404) {
-
-            throw new Error('Data not found');
-
-         } else if (response.status === 422) {
-
-            throw new Error('Validation failed, or the endpoint has been spammed.');
-
-         } else if (response.status === 500) {
-
-            throw new Error('Server error');
-
-         } else if (response.status === 503) {
-
-            throw new Error('Service unavailable');
-
-         } else {
-
-            throw new Error('Network response was not ok');
-
-         }
       };
 
-      if (response.status == 200) {
+      if (searchInputTypeValue == '2' || searchInputTypeValue == '3') {
 
-         console.log('Call succeed');
+         resultsArray.forEach(result => {
 
-      }
+            printUserCard(result);
+   
+         });
+   
+      } else if (searchInputTypeValue == '1') {
+   
+         resultsArray.forEach(result => {
 
-      // Parse response data
-      const data = await response.json();
+            printRepoCard(result);
+   
+         });
+            
+      };
 
-      // console.log('Risultati della ricerca:', data.items);
-
-      const usersArray = data.items;
-
-      console.log('Array result:', usersArray);
-
-      // Cleare output-div Element
-      outputDivElem.innerHTML = '';
-
-      if (usersArray.length < 1) {
-
-         outputDivElem.innerHTML = `
-         <div class="alert alert-info text-center w-100" role="alert">
-            No user found.
-         </div>`
-
-      }
-
-      usersArray.forEach(user => {
-
-         printUserCard(user);
-
-      });
 
    } catch (error) {
 
       console.error('Error:', error);
 
-   }
+   };
 
 };
