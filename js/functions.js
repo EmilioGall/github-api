@@ -187,7 +187,7 @@ function getFormOrderValue() {
 
 
 /**
- * Description: function prints object result card in main DOM element.
+ * Description: function search for results looking for similar name given Input string and type.
  * @param {string} searchInputValue
  */
 async function searchRepositories(searchInputValue) {
@@ -312,7 +312,121 @@ async function searchUsers(searchInputValue) {
    // Prepare Params for API call
    const params = {
 
-      q: searchInputValue,
+      q: `${searchInputValue} type:user`,
+      sort: getFormSortValue(),
+      order: getFormOrderValue(),
+      per_page: 15,
+      page: 1,
+
+   };
+
+   // Prepare Header for API call
+   const headers = {
+
+      "Authorization": `Bearer ${config.token}`,
+      "X-GitHub-Api-Version": "2022-11-28"
+
+   };
+
+   // Create URL with query parameters
+   const queryString = new URLSearchParams(params).toString();
+
+   const url = `${apiUrl}?${queryString}`;
+
+   try {
+
+      // Fetch data from API
+      const response = await fetch(url, { headers });
+
+      // Trow Errors for response not OK
+      if (response.status !== 200) {
+
+         if (response.status === 304) {
+
+            throw new Error('Not modified');
+
+         } else if (response.status === 401) {
+
+            throw new Error('Unauthorized');
+
+         } else if (response.status === 404) {
+
+            throw new Error('Data not found');
+
+         } else if (response.status === 422) {
+
+            throw new Error('Validation failed, or the endpoint has been spammed.');
+
+         } else if (response.status === 500) {
+
+            throw new Error('Server error');
+
+         } else if (response.status === 503) {
+
+            throw new Error('Service unavailable');
+
+         } else {
+
+            throw new Error('Network response was not ok');
+
+         }
+      };
+
+      if (response.status == 200) {
+
+         console.log('Call succeed');
+
+      }
+
+      // Parse response data
+      const data = await response.json();
+
+      // console.log('Risultati della ricerca:', data.items);
+
+      const usersArray = data.items;
+
+      console.log('Array result:', usersArray);
+
+      // Cleare output-div Element
+      outputDivElem.innerHTML = '';
+
+      if (usersArray.length < 1) {
+
+         outputDivElem.innerHTML = `
+         <div class="alert alert-info text-center w-100" role="alert">
+            No user found.
+         </div>`
+
+      }
+
+      usersArray.forEach(user => {
+
+         printUserCard(user);
+
+      });
+
+   } catch (error) {
+
+      console.error('Error:', error);
+
+   }
+
+};
+
+
+/**
+ * Description: function prints object result card in main DOM element.
+ * @param {string} searchInputValue
+ */
+async function searchOrganizations(searchInputValue) {
+
+   // Define const for Base URL of GitHub Search Userss API endpoint
+   const apiUrl = 'https://api.github.com/search/users';
+
+   // Prepare Params for API call
+   const params = {
+
+      q: `${searchInputValue} type:org`,
       sort: getFormSortValue(),
       order: getFormOrderValue(),
       per_page: 15,
