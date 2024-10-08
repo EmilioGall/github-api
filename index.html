@@ -35,38 +35,77 @@
 
          <div class="row justify-content-between">
 
-            <div class="col">
+            <div class="col-3">
 
-               <h1>GitHub API Search</h1>
+               <h2>GitHub API Search</h2>
 
             </div>
 
-            <div class="col d-flex align-items-center justify-content-end">
+            <div class="col-9 d-flex align-items-center justify-content-end">
 
-               <form class="d-flex gap-2" action="" method="get" role="search">
+               <div class="container">
 
-                  <input type="search" id="search-input" class="form-control form-control-dark text-bg-light"
-                     placeholder="Search..." aria-label="Search">
+                  <!-- Input Form -->
+                  <form action="" method="get" role="search" class="row g-2">
 
-                  <select id="sort-input" class="form-select" aria-label="Select sort by">
+                     <!-- Input Text for research -->
+                     <div class="col-6">
 
-                     <option selected value="1">Stars</option>
-                     <option value="2">Forks</option>
-                     <option value="3">Help wanted issues</option>
-                     <option value="4">Updated</option>
+                        <input type="search" id="search-input" class="form-control form-control-dark text-bg-light"
+                           placeholder="Search..." aria-label="Search">
 
-                  </select>
+                     </div>
+                     <!-- /Input Text for research -->
 
-                  <select id="order-input" class="form-select" aria-label="Select order">
+                     <!-- Select Sort&Order -->
+                     <div class="col-4">
 
-                     <option selected value="1">Desc</option>
-                     <option value="2">Asc</option>
+                        <div class="input-group">
 
-                  </select>
 
-                  <button type="submit" id="search-btn" class="btn btn-outline-light me-2">Search</button>
+                           <select id="sort-input" class="form-select" aria-label="Select sort by">
 
-               </form>
+                              <option selected value="1">Stars</option>
+                              <option value="2">Forks</option>
+                              <option value="3">Help wanted issues</option>
+                              <option value="4">Updated</option>
+
+                           </select>
+
+                           <select id="order-input" class="form-select" aria-label="Select order">
+
+                              <option selected value="1">Desc</option>
+                              <option value="2">Asc</option>
+
+                           </select>
+
+                        </div>
+
+                     </div>
+                     <!-- /Select Sort&Order -->
+
+                     <!-- Select Search Type -->
+                     <div class="col-2">
+
+                        <select id="search-type-input" class="form-select" aria-label="Select sort by">
+
+                           <option selected value="1">Repos</option>
+                           <option value="2">Users</option>
+                           <option value="3">Orgs</option>
+
+                        </select>
+
+                     </div>
+                     <!-- /Select Search Type -->
+
+                  </form>
+                  <!-- /Input Form -->
+
+               </div>
+
+               <!-- Search Button -->
+               <button type="submit" id="search-btn" class="btn btn-outline-light ms-3">Search</button>
+               <!-- /Search Button -->
 
             </div>
 
