@@ -1,9 +1,6 @@
 // Define const for Search Button
 const submitBtn = document.getElementById("search-btn");
 
-// Define const for Output Div
-const outputDiv = document.getElementById("output-div");
-
 // Define const for Base URL of GitHub Search Repositories API
 const apiUrl = 'https://api.github.com/search/repositories';
 
@@ -97,17 +94,18 @@ submitBtn.addEventListener("click", async function (event) {
 
    console.log(`Order value is: ${orderValue}`);
 
-   // Prepare data for API call
+   // Prepare Params for API call
    const params = {
 
       q: searchInput.value,
       sort: sortValue,
       order: orderValue,
-      per_page: 10,
+      per_page: 12,
       page: 1,
 
    };
 
+   // Prepare Header for API call
    const headers = {
 
       "Authorization": `Bearer ${config.token}`,
@@ -117,15 +115,17 @@ submitBtn.addEventListener("click", async function (event) {
 
    // Create URL with query parameters
    const queryString = new URLSearchParams(params).toString();
+   
    const url = `${apiUrl}?${queryString}`;
 
    try {
+
       // Fetch data from API
-      const response = await fetch(url, { headers });
+      const response = await fetch(url, { headers });    
 
-      // console.log(response);      
-
+      // Trow Errors for response not OK
       if (response.status !== 200) {
+
          if (response.status === 304) {
 
             throw new Error('Not modified');
@@ -166,11 +166,11 @@ submitBtn.addEventListener("click", async function (event) {
       // Parse response data
       const data = await response.json();
 
-      console.log('Risultati della ricerca:', data.items);
+      // console.log('Risultati della ricerca:', data.items);
 
       const reposArray = data.items;
 
-      console.log('Array result:', reposArray);
+      console.log('Array result:', reposArray[3]);
       
 
       if (reposArray.length < 1) {
@@ -179,10 +179,14 @@ submitBtn.addEventListener("click", async function (event) {
          
       }
 
+      
+      printResultCard(reposArray[3]);
+
 
    } catch (error) {
 
       console.error('Error:', error);
 
    }
+
 });
