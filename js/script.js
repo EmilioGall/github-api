@@ -1,6 +1,9 @@
 // Define const for Search Button
 const submitBtn = document.getElementById("search-btn");
 
+// Define const for Output Div
+const outputDivElem = document.getElementById("output-div");
+
 // Define const for Base URL of GitHub Search Repositories API
 const apiUrl = 'https://api.github.com/search/repositories';
 
@@ -100,7 +103,7 @@ submitBtn.addEventListener("click", async function (event) {
       q: searchInput.value,
       sort: sortValue,
       order: orderValue,
-      per_page: 12,
+      per_page: 15,
       page: 1,
 
    };
@@ -115,13 +118,13 @@ submitBtn.addEventListener("click", async function (event) {
 
    // Create URL with query parameters
    const queryString = new URLSearchParams(params).toString();
-   
+
    const url = `${apiUrl}?${queryString}`;
 
    try {
 
       // Fetch data from API
-      const response = await fetch(url, { headers });    
+      const response = await fetch(url, { headers });
 
       // Trow Errors for response not OK
       if (response.status !== 200) {
@@ -170,17 +173,24 @@ submitBtn.addEventListener("click", async function (event) {
 
       const reposArray = data.items;
 
-      console.log('Array result:', reposArray[3]);
-      
+      console.log('Array result:', reposArray);
+
 
       if (reposArray.length < 1) {
 
          outputDiv.innerHTML = `No repository found.`
-         
+
       }
 
-      
-      printResultCard(reposArray[3]);
+      outputDivElem.innerHTML = '';
+
+
+      reposArray.forEach(repo => {
+
+         printResultCard(repo);
+
+      });
+
 
 
    } catch (error) {

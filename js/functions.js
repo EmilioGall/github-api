@@ -2,41 +2,35 @@
  * Description: function prints object result card in main DOM element.
  * @param {object} titleToPrintOnDisplay
  */
-function printResultCard(objectToPrint, indexOfObject) {
-
-   // Define const for Output Div
-   const outputDivElem = document.getElementById("output-div");
-
-   // console.log("outputDivElem:", outputDivElem);
+function printResultCard(objectToPrint) {
 
    // Print on (outputDivElem) the attributes of (printTitleOnDisplay).
    outputDivElem.innerHTML += `
-      <div class="col-4">
+      <div class="col">
 
-         <div class="card">
+         <div class="card h-100" style="box-shadow: 1px 1px 10px #888888;">
 
-            <img src="..." class="card-img-top" alt="Icon of ${objectToPrint.name} repository">
+            <img src="${objectToPrint.owner.avatar_url}" class="card-img-top rounded-circle mx-auto mt-3" alt="Icon of ${objectToPrint.name} repository" style="width: 50%; aspect-ratio: 1; box-shadow: 1px 1px 5px #888888;">
 
-            <div class="card-body">
+            <div class="card-body h-50">
 
-               <h5 class="card-title">Card title</h5>
+               <h5 class="card-title">${objectToPrint.name}</h5>
 
-               <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+               <p class="card-text">${ objectToPrint.description !== null ? objectToPrint.description : '...'}</p>
 
             </div>
 
             <ul class="list-group list-group-flush">
 
-               <li class="list-group-item">An item</li>
-               <li class="list-group-item">A second item</li>
-               <li class="list-group-item">A third item</li>
+               <li class="list-group-item"><i class="pe-3 fa-solid fa-star"></i> ${objectToPrint.stargazers_count}</li>
+               <li class="list-group-item"><i class="pe-3 fa-solid fa-code-fork"></i> ${objectToPrint.forks_count}</li>
+               <li class="list-group-item"><i class="pe-3 fa-solid fa-bars-progress"></i> <span class="badge bg-primary-subtle border border-primary-subtle text-primary-emphasis rounded-pill">${objectToPrint.language}</span></li>
 
             </ul>
 
-            <div class="card-body">
+            <div class="card-body text-center">
 
-               <a href="#" class="card-link">Card link</a>
-               <a href="#" class="card-link">Another link</a>
+               <a href="${objectToPrint.svn_url}" class="card-link">Vai al repo <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
 
             </div>
 
