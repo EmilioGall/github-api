@@ -126,6 +126,24 @@ function printUserCard(userToPrint) {
 
 };
 
+/**
+ * Description: function prints Loader in main DOM element.
+ * 
+ */
+function printLoader() {
+
+   // Print on (outputDivElem) the Loader.
+   outputDivElem.innerHTML = `
+      <div class="alert alert-light mx-auto d-flex justify-content-between align-items-center" role="alert">
+
+         <span role="status">Loading...</span> 
+         <span class="spinner-grow spinner-grow-sm" aria-hidden="true"></span>
+
+      </div>
+   `;
+
+};
+
 
 /**
  * Description: function prints correct select options on input group DOM element.
@@ -333,6 +351,8 @@ async function search(searchInputValue, searchInputTypeValue) {
    // 2 - Users
    // 3 - Organizations
 
+   // Print Loader in main DOM element.
+   printLoader();
 
    // Define const for Base URL of GitHub Search API endpoint based on search  type
    let apiUrl = '';
@@ -373,8 +393,9 @@ async function search(searchInputValue, searchInputTypeValue) {
 
    // Create URL with query parameters
    const queryString = new URLSearchParams(params).toString();
-
    const url = `${apiUrl}?${queryString}`;
+
+   console.log('url', url);
 
    try {
 
@@ -433,6 +454,7 @@ async function search(searchInputValue, searchInputTypeValue) {
       // Clean (outputDivElem)
       outputDivElem.innerHTML = '';
 
+      // Print No Results alert in main DOM element if [resultsArray] is empty.
       if (resultsArray.length < 1) {
 
          outputDivElem.innerHTML = `
@@ -446,6 +468,7 @@ async function search(searchInputValue, searchInputTypeValue) {
 
          resultsArray.forEach(result => {
 
+            // Print User or Organization result card in main DOM element.
             printUserCard(result);
 
          });
@@ -454,6 +477,7 @@ async function search(searchInputValue, searchInputTypeValue) {
 
          resultsArray.forEach(result => {
 
+            // Print Repository result card in main DOM element.
             printRepoCard(result);
 
          });
