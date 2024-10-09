@@ -4,19 +4,63 @@
  */
 function printRepoCard(repoToPrint) {
 
+   let shortDescription = '';
+
+   const descriptionLength = 80;
+
+   let shortName = '';
+
+   const nameLength = 25;
+
+   if (repoToPrint.description !== null) {
+
+      if (repoToPrint.description.length > descriptionLength) {
+
+         shortDescription = `${repoToPrint.description.slice(0, descriptionLength)}...`;
+
+      } else {
+
+         shortDescription = repoToPrint.description;
+
+      };
+
+   } else if (repoToPrint.description == null) {
+
+      shortDescription = '...';
+
+   };
+
+   if (repoToPrint.name !== null) {
+
+      if (repoToPrint.name.length > nameLength) {
+
+         shortName = `${repoToPrint.name.slice(0, nameLength)}...`;
+
+      } else {
+
+         shortName = repoToPrint.name;
+
+      };
+
+   } else if (repoToPrint.name == null) {
+
+      shortName = '...';
+
+   };
+
    // Print on (outputDivElem) the attributes of (printTitleOnDisplay).
    outputDivElem.innerHTML += `
       <div class="col">
 
          <div class="card h-100" style="box-shadow: 1px 1px 10px #888888;">
 
-            <img src="${repoToPrint.owner.avatar_url}" class="card-img-top rounded-circle mx-auto mt-3" alt="Icon of ${repoToPrint.name} repository" style="width: 50%; aspect-ratio: 1; box-shadow: 1px 1px 5px #888888;">
+            <img src="${repoToPrint.owner.avatar_url}" class="card-img-top rounded-circle mx-auto mt-3" alt="Icon of ${shortName} repository" style="width: 50%; aspect-ratio: 1; box-shadow: 1px 1px 5px #888888;">
 
             <div class="card-body h-50">
 
-               <h5 class="card-title">${repoToPrint.name}</h5>
+               <h5 class="card-title">${shortName}</h5>
 
-               <p class="card-text">${repoToPrint.description !== null ? repoToPrint.description : '...'}</p>
+               <p class="card-text">${shortDescription}</p>
 
             </div>
 
@@ -308,7 +352,7 @@ async function search(searchInputValue, searchInputTypeValue) {
    // Prepare Params for API call
    const params = {
 
-      q: `${searchInputValue}${searchInputTypeValue == '1' ? '' : (searchInputTypeValue == '2') ? ' type:user' : ' type:org' }`,
+      q: `${searchInputValue}${searchInputTypeValue == '1' ? '' : (searchInputTypeValue == '2') ? ' type:user' : ' type:org'}`,
       sort: getFormSortValue(searchInputTypeValue),
       order: getFormOrderValue(),
       per_page: 15,
@@ -386,7 +430,7 @@ async function search(searchInputValue, searchInputTypeValue) {
 
       console.log('Array result:', resultsArray);
 
-      // Cleare output-div Element
+      // Clean (outputDivElem)
       outputDivElem.innerHTML = '';
 
       if (resultsArray.length < 1) {
@@ -403,17 +447,17 @@ async function search(searchInputValue, searchInputTypeValue) {
          resultsArray.forEach(result => {
 
             printUserCard(result);
-   
+
          });
-   
+
       } else if (searchInputTypeValue == '1') {
-   
+
          resultsArray.forEach(result => {
 
             printRepoCard(result);
-   
+
          });
-            
+
       };
 
 
