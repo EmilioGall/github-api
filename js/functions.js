@@ -38,12 +38,12 @@ function printPaginator(curPage, totalPages, elemPerPage) {
    // Print on [paginationElem] numbered button.
    for (let i = 0; i < totalPages; i++) {
 
-      if (i == curPage || i + 2 == curPage) {
+      if (curPage == i || (curPage == i + 2 && curPage <= Math.floor(totalPages / elemPerPage) + 1)) {
 
          paginationElem.innerHTML += `
          <li class="page-item">
    
-            <button class="page-link test" page="${i + 1}">${i + 1}</button>
+            <button class="page-link number-link" page="${i + 1}">${i + 1}</button>
    
          </li>
          `;
@@ -53,7 +53,7 @@ function printPaginator(curPage, totalPages, elemPerPage) {
          paginationElem.innerHTML += `
          <li class="page-item active">
    
-            <button class="page-link test" page="${i + 1}">${i + 1}</button>
+            <button class="page-link number-link" page="${i + 1}">${i + 1}</button>
    
          </li>
          `;
@@ -62,9 +62,22 @@ function printPaginator(curPage, totalPages, elemPerPage) {
 
    };
 
+   if (curPage == 1 && Math.floor(totalPages / elemPerPage) + 1 > 3) {
+
+      paginationElem.innerHTML += `
+      <li class="page-item">
+
+         <button class="page-link number-link" page="3">3</button>
+
+      </li>
+      `;
+
+   };
+
+
    // Print on [paginationElem] Next Button.
    paginationElem.innerHTML += `
-      <li id="next-btn" class="page-item ${curPage == (Number.isInteger(totalPages/elemPerPage) ? (totalPages/elemPerPage) : Math.floor(totalPages/elemPerPage)) ? 'disabled' : ''}">
+      <li id="next-btn" class="page-item ${curPage == Math.floor(totalPages / elemPerPage) + 1 ? 'disabled' : ''}">
 
          <button class="page-link" aria-label="Next">
 
@@ -78,48 +91,60 @@ function printPaginator(curPage, totalPages, elemPerPage) {
    // Define const for Previous Button
    const previousBtn = document.getElementById("previous-btn");
 
-   // Define const for Next Button
-   const nextBtn = document.getElementById("next-btn");
-
    // Add an event listener on click of [Previous Button]
-   previousBtn.addEventListener("click", function (event) {
+   previousBtn.addEventListener("click", function () {
 
-      selectedCurPage--;
+      if (curPage > 1) {
 
-      // Prevent default behaviour on event
-      event.preventDefault();
+         selectedCurPage--;
 
-      // Print Loader in main DOM element.
-      debouncedPrintLoader();
+         // Print Loader in main DOM element.
+         debouncedPrintLoader();
 
-      // Call the debounced function
-      debouncedHandleResearch();
+         // Call the debounced function
+         debouncedHandleResearch();
+      };
 
    });
 
+   // Define const for Next Button
+   const nextBtn = document.getElementById("next-btn");
+
    // Add an event listener on click of [Next Button]
-   nextBtn.addEventListener("click", function (event) {
+   nextBtn.addEventListener("click", function () {
 
-      // Prevent default behaviour on event
-      event.preventDefault();
+      if (curPage < Math.floor(totalPages / elemPerPage) + 1) {
 
-      selectedCurPage++;
+         selectedCurPage++;
 
-      console.log('clicked');
+         // Print Loader in main DOM element.
+         debouncedPrintLoader();
 
-      console.log('selectedCurPage', selectedCurPage);
+         // Call the debounced function
+         debouncedHandleResearch();
+      };
 
-      // Create a debounced version of handleResearch()
-      const debouncedHandleResearch = debounce(handleResearch, 700);
+   });
 
-      // Create a debounced version of printLoader()
-      const debouncedPrintLoader = debounce(printLoader, 1000);
+   // Define const for Numbers Buttons
+   const numbersBtns = document.querySelectorAll(".number-link");
 
-      // Print Loader in main DOM element.
-      debouncedPrintLoader();
+   numbersBtns.forEach(numBtn => {
 
-      // Call the debounced function
-      debouncedHandleResearch();
+      // Add an event listener on click of [Next Button]
+      numBtn.addEventListener("click", function (e) {
+
+         selectedCurPage = numBtn.attributes.page.nodeValue;
+
+         console.log('selectedCurPage', selectedCurPage);         
+
+         // Print Loader in main DOM element.
+         debouncedPrintLoader();
+
+         // Call the debounced function
+         debouncedHandleResearch();
+
+      });
 
    });
 
@@ -307,15 +332,19 @@ function printUserCard(userToPrint) {
  */
 function printLoader() {
 
-   // Print on (outputDivElem) the Loader.
-   outputDivElem.innerHTML = `
-      <div class="alert alert-light mx-auto d-flex justify-content-between align-items-center" role="alert">
+   if (searchInput.value.trim().length >= 3) {
 
-         <span role="status">Loading...</span> 
-         <span class="spinner-grow spinner-grow-sm" aria-hidden="true"></span>
+      // Print on (outputDivElem) the Loader.
+      outputDivElem.innerHTML = `
+         <div class="alert alert-light mx-auto d-flex justify-content-between align-items-center" role="alert">
+   
+            <span role="status">Loading...</span> 
+            <span class="spinner-grow spinner-grow-sm" aria-hidden="true"></span>
+   
+         </div>
+      `;
 
-      </div>
-   `;
+   };
 
 };
 
