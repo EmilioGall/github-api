@@ -459,8 +459,11 @@ async function search(searchInputValue, searchInputTypeValue) {
 
          outputDivElem.innerHTML = `
          <div class="alert alert-info text-center w-100" role="alert">
+
             No results found.
-         </div>`
+            
+         </div>
+         `;
 
       };
 

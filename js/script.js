@@ -24,42 +24,73 @@ typeInputElem.addEventListener('change', function () {
 
 // Add an event listener on click of [Search Button]
 submitBtn.addEventListener("click", function (event) {
+
    // Prevent default behaviour on event
    event.preventDefault();
 
    // Define const for Search Input
    const searchInput = document.getElementById("search-input");
 
-   switch (typeInputElem.value) {
+   console.log('searchInput.value.trim().length', searchInput.value.trim().length);
+   
+   if (searchInput.value.trim().length >= 3) {
 
-      case '1':
+      // Start research based on Search Type.
+      switch (typeInputElem.value) {
 
-         //Call function for repositories research
-         search(searchInput.value, typeInputElem.value);
+         case '1':
 
-         break;
+            //Call function for repositories research
+            search(searchInput.value.trim(), typeInputElem.value);
 
-      case '2':
+            break;
 
-         //Call function for users research
-         search(searchInput.value, typeInputElem.value);
+         case '2':
 
-         break;
+            //Call function for users research
+            search(searchInput.value.trim(), typeInputElem.value);
 
-      case '3':
+            break;
 
-         //Call function for organizations research
-         search(searchInput.value, typeInputElem.value);
+         case '3':
 
-         break;
+            //Call function for organizations research
+            search(searchInput.value.trim(), typeInputElem.value);
 
-      default:
+            break;
 
-         //Call function for repositories research
-         search(searchInput.value, typeInputElem.value);
+         default:
 
-         break;
+            //Call function for repositories research
+            search(searchInput.value.trim(), typeInputElem.value);
 
-   }
+            break;
+
+      };
+
+   } else if (searchInput.value.trim().length < 3 && searchInput.value.trim().length > 0) {
+
+      // Print Input too short alert in main DOM element.
+      outputDivElem.innerHTML = `
+         <div class="alert alert-warning text-center w-100" role="alert">
+
+            Input text should be at least 3 digits.
+
+         </div>
+      `;
+
+   } else if (searchInput.value.trim().length <= 0) {
+
+      // Print Input text needed alert in main DOM element.
+      outputDivElem.innerHTML = `
+         <div class="alert alert-warning text-center w-100" role="alert">
+
+            Input text needed.
+
+         </div>
+      `;
+
+   };
+
 
 });
