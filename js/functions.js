@@ -351,8 +351,6 @@ async function search(searchInputValue, searchInputTypeValue) {
    // 2 - Users
    // 3 - Organizations
 
-   // Print Loader in main DOM element.
-   printLoader();
 
    // Define const for Base URL of GitHub Search API endpoint based on search  type
    let apiUrl = '';
@@ -461,7 +459,7 @@ async function search(searchInputValue, searchInputTypeValue) {
          <div class="alert alert-info text-center w-100" role="alert">
 
             No results found.
-            
+
          </div>
          `;
 
@@ -491,6 +489,109 @@ async function search(searchInputValue, searchInputTypeValue) {
    } catch (error) {
 
       console.error('Error:', error);
+
+   };
+
+};
+
+
+/**
+ * Description: function handle research based on Search Type.
+ * 
+ */
+function handleResearch() {
+
+   // Define const for Search Input
+   const searchInput = document.getElementById("search-input");
+
+   console.log('searchInput.value.trim().length', searchInput.value.trim().length);
+
+   if (searchInput.value.trim().length >= 3) {
+
+      // Start research based on Search Type.
+      switch (typeInputElem.value) {
+
+         case '1':
+
+            //Call function for repositories research
+            search(searchInput.value.trim(), typeInputElem.value);
+
+            break;
+
+         case '2':
+
+            //Call function for users research
+            search(searchInput.value.trim(), typeInputElem.value);
+
+            break;
+
+         case '3':
+
+            //Call function for organizations research
+            search(searchInput.value.trim(), typeInputElem.value);
+
+            break;
+
+         default:
+
+            //Call function for repositories research
+            search(searchInput.value.trim(), typeInputElem.value);
+
+            break;
+
+      };
+
+   } else if (searchInput.value.trim().length < 3 && searchInput.value.trim().length > 0) {
+
+      // Print Input too short alert in main DOM element.
+      outputDivElem.innerHTML = `
+         <div class="alert alert-warning text-center w-100" role="alert">
+   
+            Input text should be at least 3 digits.
+   
+         </div>
+      `;
+
+   } else if (searchInput.value.trim().length <= 0) {
+
+      // Print Input text needed alert in main DOM element.
+      outputDivElem.innerHTML = `
+         <div class="alert alert-warning text-center w-100" role="alert">
+   
+            Input text needed.
+   
+         </div>
+      `;
+
+   };
+
+};
+
+/**
+ * Description: function calls the given function [functionToCall] only after time param [waitTime].
+ * @param {function} functionToCall
+ * @param {number} waitTime
+ * @returns {function} 
+ */
+function debounce(functionToCall, waitTime) {
+
+   // Define variable for timeout
+   let timeout;
+
+   return function () { // capture arguments passed to the debounced function
+
+      // Clear the previous timer
+      clearTimeout(timeout);
+
+      // Capture context of function
+      const context = this;
+
+      timeout = setTimeout(() => {
+
+         // Execute the function with the correct context
+         functionToCall.call(context);
+
+      }, waitTime);
 
    };
 
