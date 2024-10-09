@@ -21,6 +21,11 @@ typeInputElem.addEventListener('change', function () {
 
 });
 
+// Define const for Search Input
+const searchInput = document.getElementById("search-input");
+
+console.log('searchInput.value.trim().length', searchInput.value.trim().length);
+
 // Create a debounced version of handleResearch()
 const debouncedHandleResearch = debounce(handleResearch, 700);
 
@@ -38,5 +43,21 @@ submitBtn.addEventListener("click", function (event) {
 
    // Call the debounced function
    debouncedHandleResearch();
+
+});
+
+// Add input event listener on [search Input]
+searchInput.addEventListener('input', function () {
+
+   // Check if input length is >= 3
+   if (searchInput.value.trim().length >= 3) {
+
+      // Print Loader in main DOM element.
+      debouncedPrintLoader();
+
+      // Call the debounced function
+      debouncedHandleResearch();
+
+   };
 
 });

@@ -501,11 +501,6 @@ async function search(searchInputValue, searchInputTypeValue) {
  */
 function handleResearch() {
 
-   // Define const for Search Input
-   const searchInput = document.getElementById("search-input");
-
-   console.log('searchInput.value.trim().length', searchInput.value.trim().length);
-
    if (searchInput.value.trim().length >= 3) {
 
       // Start research based on Search Type.
