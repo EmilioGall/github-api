@@ -1,4 +1,179 @@
 /**
+ * Description: function prints paginator.
+ * @param {object} repoToPrint
+ */
+function printPaginator(curPage, totalPages, elemPerPage) {
+
+   //Clean [paginatorContainerElem]
+   paginatorContainerElem.innerHTML = '';
+
+   // Print on [paginatorContainerElem] paginator scaffolding.
+   paginatorContainerElem.innerHTML += `
+      <nav aria-label="Page navigation example">
+
+         <ul class="pagination pagination-sm justify-content-center">
+
+
+         </ul>
+
+      </nav>
+   `;
+
+   // Define const for Pagination
+   const paginationElem = document.querySelector(".pagination");
+
+   // Print on [paginationElem] Previous Button.
+   paginationElem.innerHTML += `
+      <li id="previous-btn" class="page-item ${curPage == '1' ? 'disabled' : ''}">
+
+         <button class="page-link" aria-label="Previous">
+
+            <span aria-hidden="true">&laquo;</span>
+
+         </button>
+
+      </li>
+   `;
+
+   // Print on [paginationElem] numbered button.
+   for (let i = 0; i < totalPages; i++) {
+
+      if (i == curPage || i + 2 == curPage) {
+
+         paginationElem.innerHTML += `
+         <li class="page-item">
+   
+            <button class="page-link test" page="${i + 1}">${i + 1}</button>
+   
+         </li>
+         `;
+
+      } else if (i + 1 == curPage) {
+
+         paginationElem.innerHTML += `
+         <li class="page-item active">
+   
+            <button class="page-link test" page="${i + 1}">${i + 1}</button>
+   
+         </li>
+         `;
+
+      };
+
+   };
+
+   // Print on [paginationElem] Next Button.
+   paginationElem.innerHTML += `
+      <li id="next-btn" class="page-item ${curPage == (Number.isInteger(totalPages/elemPerPage) ? (totalPages/elemPerPage) : Math.floor(totalPages/elemPerPage)) ? 'disabled' : ''}">
+
+         <button class="page-link" aria-label="Next">
+
+            <span aria-hidden="true">&raquo;</span>
+
+         </button>
+
+      </li>
+   `;
+
+   // Define const for Previous Button
+   const previousBtn = document.getElementById("previous-btn");
+
+   // Define const for Next Button
+   const nextBtn = document.getElementById("next-btn");
+
+   // Add an event listener on click of [Previous Button]
+   previousBtn.addEventListener("click", function (event) {
+
+      selectedCurPage--;
+
+      // Prevent default behaviour on event
+      event.preventDefault();
+
+      // Print Loader in main DOM element.
+      debouncedPrintLoader();
+
+      // Call the debounced function
+      debouncedHandleResearch();
+
+   });
+
+   // Add an event listener on click of [Next Button]
+   nextBtn.addEventListener("click", function (event) {
+
+      // Prevent default behaviour on event
+      event.preventDefault();
+
+      selectedCurPage++;
+
+      console.log('clicked');
+
+      console.log('selectedCurPage', selectedCurPage);
+
+      // Create a debounced version of handleResearch()
+      const debouncedHandleResearch = debounce(handleResearch, 700);
+
+      // Create a debounced version of printLoader()
+      const debouncedPrintLoader = debounce(printLoader, 1000);
+
+      // Print Loader in main DOM element.
+      debouncedPrintLoader();
+
+      // Call the debounced function
+      debouncedHandleResearch();
+
+   });
+
+};
+
+/**
+ * Description: function prints correct select options on input group DOM element.
+ * 
+ */
+function printSelectOnInputgroup() {
+
+   if (typeInputElem.value == '1') {
+
+      inputgroupDivElem.innerHTML = `
+         <select id="sort-input" class="form-select" aria-label="Select sort by">
+   
+            <option selected value="1">Stars</option>
+            <option value="2">Forks</option>
+            <option value="3">Issues</option>
+            <option value="4">Updated</option>
+   
+         </select>
+   
+         <select id="order-input" class="form-select" aria-label="Select order">
+   
+            <option selected value="1">Desc</option>
+            <option value="2">Asc</option>
+   
+         </select>`
+
+   } else if (typeInputElem.value == '2' || typeInputElem.value == '3') {
+
+      inputgroupDivElem.innerHTML = `
+      <select id="sort-input" class="form-select" aria-label="Select sort by">
+   
+         <option selected value="1">Joined</option>
+         <option value="2">Repos</option>
+         <option value="3">Followers</option>
+   
+      </select>
+   
+      <select id="order-input" class="form-select" aria-label="Select order">
+   
+         <option selected value="1">Desc</option>
+         <option value="2">Asc</option>
+   
+      </select>`
+
+   };
+
+};
+
+
+/**
  * Description: function prints repository result card in main DOM element.
  * @param {object} repoToPrint
  */
@@ -146,54 +321,6 @@ function printLoader() {
 
 
 /**
- * Description: function prints correct select options on input group DOM element.
- * 
- */
-function printSelectOnInputgroup() {
-
-   if (typeInputElem.value == '1') {
-
-      inputgroupDivElem.innerHTML = `
-         <select id="sort-input" class="form-select" aria-label="Select sort by">
-   
-            <option selected value="1">Stars</option>
-            <option value="2">Forks</option>
-            <option value="3">Issues</option>
-            <option value="4">Updated</option>
-   
-         </select>
-   
-         <select id="order-input" class="form-select" aria-label="Select order">
-   
-            <option selected value="1">Desc</option>
-            <option value="2">Asc</option>
-   
-         </select>`
-
-   } else if (typeInputElem.value == '2' || typeInputElem.value == '3') {
-
-      inputgroupDivElem.innerHTML = `
-      <select id="sort-input" class="form-select" aria-label="Select sort by">
-   
-         <option selected value="1">Joined</option>
-         <option value="2">Repos</option>
-         <option value="3">Followers</option>
-   
-      </select>
-   
-      <select id="order-input" class="form-select" aria-label="Select order">
-   
-         <option selected value="1">Desc</option>
-         <option value="2">Asc</option>
-   
-      </select>`
-
-   };
-
-};
-
-
-/**
  * Description: function define constants value for [sortValue].
  * @returns {string} sortValue
  */
@@ -288,8 +415,6 @@ function getFormSortValue(searchInputTypeValue) {
 
       };
 
-      console.log(`Sort value is: ${sortValue}`);
-
       return sortValue;
 
    };
@@ -334,8 +459,6 @@ function getFormOrderValue() {
 
    };
 
-   console.log(`Order value is: ${orderValue}`);
-
    return orderValue;
 
 };
@@ -373,8 +496,8 @@ async function search(searchInputValue, searchInputTypeValue) {
       q: `${searchInputValue}${searchInputTypeValue == '1' ? '' : (searchInputTypeValue == '2') ? ' type:user' : ' type:org'}`,
       sort: getFormSortValue(searchInputTypeValue),
       order: getFormOrderValue(),
-      per_page: 15,
-      page: 1,
+      per_page: selectedResults,
+      page: selectedCurPage,
 
    };
 
@@ -443,11 +566,11 @@ async function search(searchInputValue, searchInputTypeValue) {
       // Parse response data
       const data = await response.json();
 
-      // console.log('Risultati della ricerca:', data.items);
+      console.log('Object result:', data);
 
       const resultsArray = data.items;
 
-      console.log('Array result:', resultsArray);
+      // console.log('Array result:', resultsArray);
 
       // Clean (outputDivElem)
       outputDivElem.innerHTML = '';
@@ -463,27 +586,33 @@ async function search(searchInputValue, searchInputTypeValue) {
          </div>
          `;
 
+      } else if (resultsArray.length >= 1) {
+
+         if (searchInputTypeValue == '2' || searchInputTypeValue == '3') {
+
+            resultsArray.forEach(result => {
+
+               // Print User or Organization result card in main DOM element.
+               printUserCard(result);
+
+            });
+
+         } else if (searchInputTypeValue == '1') {
+
+            resultsArray.forEach(result => {
+
+               // Print Repository result card in main DOM element.
+               printRepoCard(result);
+
+            });
+
+         };
+
+         // Print paginator in main DOM element.
+         printPaginator(selectedCurPage, data.total_count, selectedResults);
+
       };
 
-      if (searchInputTypeValue == '2' || searchInputTypeValue == '3') {
-
-         resultsArray.forEach(result => {
-
-            // Print User or Organization result card in main DOM element.
-            printUserCard(result);
-
-         });
-
-      } else if (searchInputTypeValue == '1') {
-
-         resultsArray.forEach(result => {
-
-            // Print Repository result card in main DOM element.
-            printRepoCard(result);
-
-         });
-
-      };
 
 
    } catch (error) {

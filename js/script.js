@@ -1,19 +1,9 @@
-// Define const for Search Button
-const submitBtn = document.getElementById("search-btn");
-
-// Define const for Output Div
-const outputDivElem = document.getElementById("output-div");
-
-// Define const for Input Group Div
-const inputgroupDivElem = document.getElementById("input-group");
-
-// Define const for Search Type Input
-const typeInputElem = document.getElementById("search-type-input");
+//////////  Header //////////
 
 // Print correct options in Select tag of Input Group
 printSelectOnInputgroup();
 
-// Add an event listener for the 'change' event of [typeInputElem]
+// Add change event listener of [typeInputElem]
 typeInputElem.addEventListener('change', function () {
 
    // Print correct options in Select tag of Input Group
@@ -21,10 +11,7 @@ typeInputElem.addEventListener('change', function () {
 
 });
 
-// Define const for Search Input
-const searchInput = document.getElementById("search-input");
-
-console.log('searchInput.value.trim().length', searchInput.value.trim().length);
+//////////  Main //////////
 
 // Create a debounced version of handleResearch()
 const debouncedHandleResearch = debounce(handleResearch, 700);
@@ -61,3 +48,5 @@ searchInput.addEventListener('input', function () {
    };
 
 });
+
+//////////  Pagination //////////
