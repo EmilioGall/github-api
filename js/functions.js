@@ -22,7 +22,7 @@ function handlePagination(curPage, totalResults, elemPerPage) {
    // Print on [paginationNavElem] Select Input [per_page], List Pagination and Select Input [page].
    paginationNavElem.innerHTML += `
       <div class="col-3">
-         <select class="form-select m-0" aria-label="Select per page">
+         <select class="form-select select-per-page m-0" aria-label="Select per page">
             <option selected>Results per page</option>
             <option value="5">5</option>
             <option value="15">15</option>
@@ -41,57 +41,43 @@ function handlePagination(curPage, totalResults, elemPerPage) {
       </div>
 
       <div class="col-3">
-         <select class="form-select select-page m-0" aria-label="Select per page">
+         <select class="form-select select-page m-0" aria-label="Select page">
 
          
          </select>
       </div>
    `;
 
-   // Define const for Pagination Select Page Element
-   const paginationSelectPageElem = document.querySelector(".select-page");
-
-   // Print on [paginationSelectPageElem] Select Input [pages].
-   paginationSelectPageElem.innerHTML += `
-
-      <option selected>Select page</option>
-
-   `;
-
-   console.log('Numero Pagine:', (Math.floor(totalResults / elemPerPage) + 1));
    
+   // Define const for Pagination
+   const paginationElem = document.querySelector(".pagination");
+   
+   // Print on [paginationElem] Previous Button.
+   paginationElem.innerHTML += `
+   <li id="previous-btn" class="page-item ${curPage == '1' ? 'disabled' : ''}">
+   
+   <button class="page-link" aria-label="Previous">
+   
+   <span aria-hidden="true">&laquo;</span>
+   
+   </button>
+   
+   </li>
+   `;
+   
+   // Print on [paginationElem] numbered button.
+   if (curPage == Math.floor(totalResults / elemPerPage) + 1 && curPage >= 3) {
 
-   for (let i = 0; i < (Math.floor(totalResults / elemPerPage) + 1); i++) {
-      // const element = array[i];
-      
-      console.log('ciclato:', i+1);
-      
-      
-      paginationSelectPageElem.innerHTML += `
+      paginationElem.innerHTML += `
+      <li class="page-item">
 
-         <option value="${i+1}">${i+1}</option>
+         <button class="page-link number-link" page="${curPage - 2}">${curPage - 2}</button>
 
+      </li>
       `;
 
    };
 
-   // Define const for Pagination
-   const paginationElem = document.querySelector(".pagination");
-
-   // Print on [paginationElem] Previous Button.
-   paginationElem.innerHTML += `
-      <li id="previous-btn" class="page-item ${curPage == '1' ? 'disabled' : ''}">
-
-         <button class="page-link" aria-label="Previous">
-
-            <span aria-hidden="true">&laquo;</span>
-
-         </button>
-
-      </li>
-   `;
-
-   // Print on [paginationElem] numbered button.
    for (let i = 0; i < totalResults; i++) {
 
       if (curPage == i && curPage < Math.floor(totalResults / elemPerPage) + 1 || curPage == i + 2) {
@@ -103,9 +89,9 @@ function handlePagination(curPage, totalResults, elemPerPage) {
    
          </li>
          `;
-
+         
       } else if (curPage == i + 2) {
-
+         
          paginationElem.innerHTML += `
          <li class="page-item">
    
@@ -128,7 +114,7 @@ function handlePagination(curPage, totalResults, elemPerPage) {
 
    };
 
-   if (curPage == 1 && Math.floor(totalResults / elemPerPage) + 1 > 3) {
+   if (curPage == 1 && Math.floor(totalResults / elemPerPage) + 1 >= 3) {
 
       paginationElem.innerHTML += `
       <li class="page-item">
@@ -139,19 +125,43 @@ function handlePagination(curPage, totalResults, elemPerPage) {
       `;
 
    };
-
+   
    // Print on [paginationElem] Next Button.
    paginationElem.innerHTML += `
       <li id="next-btn" class="page-item ${curPage == Math.floor(totalResults / elemPerPage) + 1 ? 'disabled' : ''}">
 
          <button class="page-link" aria-label="Next">
-
-            <span aria-hidden="true">&raquo;</span>
-
+         
+         <span aria-hidden="true">&raquo;</span>
+         
          </button>
-
+         
       </li>
    `;
+
+   // Define const for Pagination Select Page Element
+   const paginationSelectPageElem = document.querySelector(".select-page");
+
+   // Print on [paginationSelectPageElem] Select Input Pages.
+   paginationSelectPageElem.innerHTML += `
+
+      <option selected>Select page</option>
+
+   `;
+
+   for (let i = 0; i < (Math.floor(totalResults / elemPerPage) + 1); i++) {
+      // const element = array[i];
+
+      console.log('ciclato:', i + 1);
+
+
+      paginationSelectPageElem.innerHTML += `
+
+         <option value="${i + 1}">${i + 1}</option>
+
+      `;
+
+   };
 
    //////////////////////////////////////////////////////////////////////
 
@@ -203,8 +213,6 @@ function handlePagination(curPage, totalResults, elemPerPage) {
 
          selectedCurPage = numBtn.attributes.page.nodeValue;
 
-         console.log('selectedCurPage', selectedCurPage);
-
          // Print Loader in main DOM element.
          debouncedPrintLoader();
 
@@ -214,6 +222,49 @@ function handlePagination(curPage, totalResults, elemPerPage) {
       });
 
    });
+
+   // Define const for PerPage Select
+   const perPageSelect = document.querySelector(".select-per-page");
+
+   console.log('perPageSelect', perPageSelect);
+
+   // Add an event listener on change of [perPageSelect]
+   perPageSelect.addEventListener("change", function () {
+
+      selectedResults = perPageSelect.value;
+
+      selectedCurPage = 1;
+
+      console.log('selectedCurPage', selectedCurPage);
+
+      // Print Loader in main DOM element.
+      debouncedPrintLoader();
+
+      // Call the debounced function
+      debouncedHandleResearch();
+
+   });
+
+   // Define const for Page Select
+   const pageSelect = document.querySelector(".select-page");
+
+   console.log('pageSelect', pageSelect);
+
+   // Add an event listener on change of [PageSelect]
+   pageSelect.addEventListener("change", function () {
+
+      selectedCurPage = pageSelect.value;
+
+      console.log('selectedCurPage', selectedCurPage);
+
+      // Print Loader in main DOM element.
+      debouncedPrintLoader();
+
+      // Call the debounced function
+      debouncedHandleResearch();
+
+   });
+
 
 };
 
