@@ -2,7 +2,7 @@
  * Description: function prints paginator.
  * @param {object} repoToPrint
  */
-function printPaginator(curPage, totalPages, elemPerPage) {
+function handlePagination(curPage, totalPages, elemPerPage) {
 
    //Clean [paginatorContainerElem]
    paginatorContainerElem.innerHTML = '';
@@ -38,7 +38,7 @@ function printPaginator(curPage, totalPages, elemPerPage) {
    // Print on [paginationElem] numbered button.
    for (let i = 0; i < totalPages; i++) {
 
-      if (curPage == i || (curPage == i + 2 && curPage <= Math.floor(totalPages / elemPerPage) + 1)) {
+      if (curPage == i && curPage < Math.floor(totalPages / elemPerPage) + 1 || curPage == i + 2) {
 
          paginationElem.innerHTML += `
          <li class="page-item">
@@ -638,7 +638,7 @@ async function search(searchInputValue, searchInputTypeValue) {
          };
 
          // Print paginator in main DOM element.
-         printPaginator(selectedCurPage, data.total_count, selectedResults);
+         handlePagination(selectedCurPage, data.total_count, selectedResults);
 
       };
 
