@@ -2,22 +2,78 @@
  * Description: function prints paginator.
  * @param {object} repoToPrint
  */
-function handlePagination(curPage, totalPages, elemPerPage) {
+function handlePagination(curPage, totalResults, elemPerPage) {
 
    //Clean [paginatorContainerElem]
    paginatorContainerElem.innerHTML = '';
 
    // Print on [paginatorContainerElem] paginator scaffolding.
    paginatorContainerElem.innerHTML += `
-      <nav aria-label="Page navigation example">
-
-         <ul class="pagination pagination-sm justify-content-center">
+      <nav class="page-navigator row g-3 align-items-center justify-content-center py-3" aria-label="Page navigation example">
 
 
-         </ul>
 
       </nav>
    `;
+
+   // Define const for Pagination Nav Element
+   const paginationNavElem = document.querySelector(".page-navigator");
+
+   // Print on [paginationNavElem] Select Input [per_page], List Pagination and Select Input [page].
+   paginationNavElem.innerHTML += `
+      <div class="col-3">
+         <select class="form-select m-0" aria-label="Select per page">
+            <option selected>Results per page</option>
+            <option value="5">5</option>
+            <option value="15">15</option>
+            <option value="30">30</option>
+            <option value="50">50</option>
+            <option value="75">75</option>
+            <option value="100">100</option>
+         </select>
+      </div>
+      
+      <div class="col-3">
+         <ul class="pagination pagination-sm justify-content-center m-0 py-2">
+
+
+         </ul>
+      </div>
+
+      <div class="col-3">
+         <select class="form-select select-page m-0" aria-label="Select per page">
+
+         
+         </select>
+      </div>
+   `;
+
+   // Define const for Pagination Select Page Element
+   const paginationSelectPageElem = document.querySelector(".select-page");
+
+   // Print on [paginationSelectPageElem] Select Input [pages].
+   paginationSelectPageElem.innerHTML += `
+
+      <option selected>Select page</option>
+
+   `;
+
+   console.log('Numero Pagine:', (Math.floor(totalResults / elemPerPage) + 1));
+   
+
+   for (let i = 0; i < (Math.floor(totalResults / elemPerPage) + 1); i++) {
+      // const element = array[i];
+      
+      console.log('ciclato:', i+1);
+      
+      
+      paginationSelectPageElem.innerHTML += `
+
+         <option value="${i+1}">${i+1}</option>
+
+      `;
+
+   };
 
    // Define const for Pagination
    const paginationElem = document.querySelector(".pagination");
@@ -36,9 +92,19 @@ function handlePagination(curPage, totalPages, elemPerPage) {
    `;
 
    // Print on [paginationElem] numbered button.
-   for (let i = 0; i < totalPages; i++) {
+   for (let i = 0; i < totalResults; i++) {
 
-      if (curPage == i && curPage < Math.floor(totalPages / elemPerPage) + 1 || curPage == i + 2) {
+      if (curPage == i && curPage < Math.floor(totalResults / elemPerPage) + 1 || curPage == i + 2) {
+
+         paginationElem.innerHTML += `
+         <li class="page-item">
+   
+            <button class="page-link number-link" page="${i + 1}">${i + 1}</button>
+   
+         </li>
+         `;
+
+      } else if (curPage == i + 2) {
 
          paginationElem.innerHTML += `
          <li class="page-item">
@@ -62,7 +128,7 @@ function handlePagination(curPage, totalPages, elemPerPage) {
 
    };
 
-   if (curPage == 1 && Math.floor(totalPages / elemPerPage) + 1 > 3) {
+   if (curPage == 1 && Math.floor(totalResults / elemPerPage) + 1 > 3) {
 
       paginationElem.innerHTML += `
       <li class="page-item">
@@ -74,10 +140,9 @@ function handlePagination(curPage, totalPages, elemPerPage) {
 
    };
 
-
    // Print on [paginationElem] Next Button.
    paginationElem.innerHTML += `
-      <li id="next-btn" class="page-item ${curPage == Math.floor(totalPages / elemPerPage) + 1 ? 'disabled' : ''}">
+      <li id="next-btn" class="page-item ${curPage == Math.floor(totalResults / elemPerPage) + 1 ? 'disabled' : ''}">
 
          <button class="page-link" aria-label="Next">
 
@@ -87,6 +152,8 @@ function handlePagination(curPage, totalPages, elemPerPage) {
 
       </li>
    `;
+
+   //////////////////////////////////////////////////////////////////////
 
    // Define const for Previous Button
    const previousBtn = document.getElementById("previous-btn");
@@ -113,7 +180,7 @@ function handlePagination(curPage, totalPages, elemPerPage) {
    // Add an event listener on click of [Next Button]
    nextBtn.addEventListener("click", function () {
 
-      if (curPage < Math.floor(totalPages / elemPerPage) + 1) {
+      if (curPage < Math.floor(totalResults / elemPerPage) + 1) {
 
          selectedCurPage++;
 
@@ -136,7 +203,7 @@ function handlePagination(curPage, totalPages, elemPerPage) {
 
          selectedCurPage = numBtn.attributes.page.nodeValue;
 
-         console.log('selectedCurPage', selectedCurPage);         
+         console.log('selectedCurPage', selectedCurPage);
 
          // Print Loader in main DOM element.
          debouncedPrintLoader();
