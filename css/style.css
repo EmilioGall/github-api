@@ -1,12 +1,51 @@
-footer {
+header {
 
-   height: 100px;
+   /* background: linear-gradient(90deg, rgba(37,39,59,1) 0%, rgba(63,77,120,1) 100%); */
+   box-shadow: 1px 1px 10px #888888;   
 }
 
 .card {
+   position: relative;
+   z-index: 2;
+   overflow: hidden;
+
    transition: all .2s ease-in-out;
 }
 
 .card:hover {
    transform: scale(1.1);
+}
+
+/* Card controll */
+
+.card:hover .bg-graphic {
+
+   transform: scale(1.5);
+   rotate: 0deg;
+}
+
+.bg-graphic {
+   height: 50%;
+   width: 120%;
+   /* background-color: #f9b234; */
+
+   z-index: -1;
+   position: absolute;
+   top: -30%;
+   left: -20%;
+
+   rotate: -10deg;
+
+   transition: all .5s ease;
+}
+
+.bg-repos {
+
+   background: linear-gradient(90deg, rgba(37,39,59,1) 0%, rgba(63,77,120,1) 100%);
+
+}
+
+.bg-users {
+
+   background: linear-gradient(90deg, rgba(37,39,59,1) 0%, rgba(63,120,107,1) 100%);
 }
