@@ -48,10 +48,10 @@ function handlePagination(curPage, totalResults, elemPerPage) {
       </div>
    `;
 
-   
+
    // Define const for Pagination
    const paginationElem = document.querySelector(".pagination");
-   
+
    // Print on [paginationElem] Previous Button.
    paginationElem.innerHTML += `
    <li id="previous-btn" class="page-item ${curPage == '1' ? 'disabled' : ''}">
@@ -64,7 +64,7 @@ function handlePagination(curPage, totalResults, elemPerPage) {
    
    </li>
    `;
-   
+
    // Print on [paginationElem] numbered button.
    if (curPage == Math.floor(totalResults / elemPerPage) + 1 && curPage >= 3) {
 
@@ -89,9 +89,9 @@ function handlePagination(curPage, totalResults, elemPerPage) {
    
          </li>
          `;
-         
+
       } else if (curPage == i + 2) {
-         
+
          paginationElem.innerHTML += `
          <li class="page-item">
    
@@ -125,7 +125,7 @@ function handlePagination(curPage, totalResults, elemPerPage) {
       `;
 
    };
-   
+
    // Print on [paginationElem] Next Button.
    paginationElem.innerHTML += `
       <li id="next-btn" class="page-item ${curPage == Math.floor(totalResults / elemPerPage) + 1 ? 'disabled' : ''}">
@@ -476,6 +476,16 @@ function getFormSortValue(searchInputTypeValue) {
    // Define const for Sort Input
    const sortInput = document.getElementById("sort-input");
 
+   // Add change event listener of [sortInput]
+   sortInput.addEventListener('change', function () {
+
+      // Print Loader in main DOM element.
+      debouncedPrintLoader();
+
+      // Call the debounced function
+      debouncedHandleResearch();
+
+   });
 
    if (searchInputTypeValue == '1') {
 
@@ -576,6 +586,17 @@ function getFormOrderValue() {
 
    // Define const for Order Input
    const orderInput = document.getElementById("order-input");
+
+   // Add change event listener of [orderInput]
+   orderInput.addEventListener('change', function () {
+
+      // Print Loader in main DOM element.
+      debouncedPrintLoader();
+
+      // Call the debounced function
+      debouncedHandleResearch();
+
+   });
 
    // Define variable for order value
    let orderValue = 'desc'; // default
