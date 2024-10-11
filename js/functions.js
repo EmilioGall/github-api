@@ -150,10 +150,6 @@ function handlePagination(curPage, totalResults, elemPerPage) {
    `;
 
    for (let i = 0; i < (Math.floor(totalResults / elemPerPage) + 1); i++) {
-      // const element = array[i];
-
-      console.log('ciclato:', i + 1);
-
 
       paginationSelectPageElem.innerHTML += `
 
@@ -372,6 +368,8 @@ function printRepoCard(repoToPrint) {
 
          <div class="card h-100" style="box-shadow: 1px 1px 10px #888888;">
 
+            <div class="bg-graphic bg-repos"></div>
+
             <img src="${repoToPrint.owner.avatar_url}" class="card-img-top rounded-circle mx-auto mt-3" alt="Icon of ${shortName} repository" style="width: 50%; aspect-ratio: 1; box-shadow: 1px 1px 5px #888888;">
 
             <div class="card-body h-50">
@@ -392,7 +390,7 @@ function printRepoCard(repoToPrint) {
 
             <div class="card-body text-center">
 
-               <a href="${repoToPrint.svn_url}" class="card-link">Vai al repo <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+               <a href="${repoToPrint.svn_url}" class="card-link">Go to repo <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
 
             </div>
 
@@ -415,6 +413,8 @@ function printUserCard(userToPrint) {
 
          <div class="card h-100" style="box-shadow: 1px 1px 10px #888888;">
 
+            <div class="bg-graphic bg-users"></div>
+
             <img src="${userToPrint.avatar_url}" class="card-img-top rounded-circle mx-auto mt-3" alt="Icon of ${userToPrint.login} repository" style="width: 50%; aspect-ratio: 1; box-shadow: 1px 1px 5px #888888;">
 
             <div class="card-body h-50">
@@ -433,7 +433,7 @@ function printUserCard(userToPrint) {
 
             <div class="card-body text-center">
 
-               <a href="${userToPrint.html_url}" class="card-link">Vai al repo <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+               <a href="${userToPrint.html_url}" class="card-link">Go to profile <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
 
             </div>
 

@@ -11,10 +11,10 @@ const searchInput = document.getElementById("search-input");
 
 // console.log('searchInput.value.trim().length', searchInput.value.trim().length);
 
-//////////  Main //////////
-
 // Define const for Search Button
 const submitBtn = document.getElementById("search-btn");
+
+//////////  Main //////////
 
 // Define const for Output Div
 const outputDivElem = document.getElementById("output-div");

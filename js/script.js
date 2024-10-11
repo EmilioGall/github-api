@@ -86,4 +86,23 @@ searchInput.addEventListener('input', function () {
 
 });
 
-//////////  Pagination //////////
+// Add keypress event listener on [search Input]
+searchInput.addEventListener("keypress", function (event) {
+
+   // If the user presses the "Enter" key on the keyboard
+   if (event.key === "Enter") {
+
+      // Cancel the default action, if needed
+      event.preventDefault();
+
+      // Print Loader in main DOM element.
+      debouncedPrintLoader();
+
+      // Call the debounced function
+      debouncedHandleResearch();
+
+   };
+
+});
+
+//////////  Test //////////
